@@ -540,5 +540,237 @@
         group by l.city;
     ```
 
-  
 
+
+## 2.4 서브쿼리
+
+- [실습] SMITH와 같은 부서에 근무하는 사원의 목록을 조회
+
+  - ```sql
+     select * from emp 
+     where deptno = (select deptno from emp where ename = 'SMITH');
+
+- [실습]10번부서의 평균급여보다 급여가 많은 사원의 목록을 조회
+
+  - ```sql
+    select * from emp 
+    where sal > (select avg(sal) from emp where deptno =10);
+    ```
+
+- [실습]전체 평균 급여보다 급여가 많은 사원의 목록을 조회
+
+  - ```sql
+    select * from emp 
+    where sal > (select avg(sal) from emp);
+    ```
+
+- [실습]7566번 사원보다 급여를 많이 받는 사원의 이름과 급여를 조회
+
+  - ```sql
+     select ename, sal from emp
+     where sal > (select sal from emp where empno =7566);
+    ```
+
+- 개요
+
+  - 쿼리 안에 포함된 쿼리를 의미
+
+  - `select문`에 삽입된 `select문`을 의미
+
+  - ```
+    구문
+    select 컬럼명
+    from 테이블
+    where 컬럼명 연산자 (select 컬럼명 from 테이블 where *****  )
+    ```
+
+  - 서브퀘리는 `( )`를 삽입하여 작업
+
+  - 서브쿼리도 일반쿼리 처럼 `group by`, `join` 모두 사용이 가능
+
+  - 서브쿼리는 메인쿼리 실행전에  한번만 실행된다
+
+  - `where절`에 서브쿼리를 삽입하는 경우 비교조건의 오른쪽에 쿼리를 삽입
+
+  - 보통 서브쿼리의 결과가 행 하나 컬럼 하나인 경우가 대부분
+
+  - `select`, `from`,`where`,`having`,`group by`절에 서브쿼리를 사용할 수 있다.
+
+  - `insert`, `delete`, `update`문 모두 서브쿼리 사용할 수 있다.
+
+- 서브쿼리의 종류
+
+  - 단일행 서브쿼리
+
+    - 서브쿼리의 결과가 1행,1열인 쿼리
+
+  - 다중행 서브쿼리
+
+    - 서브쿼리의 결과가 다중행인 경우
+
+    - 비교연산자를 사용불가(단,`any`,`all`과 함께인 경우는 가능)
+
+      - `in`,`any`,`all`연산자를 사용하여야 한다.
+
+        - `in` :  괄호안의 값과 일치하는 결과가 반영
+
+          - ```sql
+            select ename,sal from emp
+            where sal  in (950,1250,1600);
+            
+            select ename,sal from emp 
+            where sal  in (950,1250,1600);
+            ```
+
+        - `any` : 어떠한 값보다 작거나 커야한다.(최대값보다 작은 값을 조회) = `or`
+
+          - ```sql
+            select ename,sal from emp
+            where sal < any (950,1250,1600);
+            
+            select ename,sal from emp 
+            where sal > any (950,1250,1600);
+            ```
+
+        - `all` : 모든 값보다 작거나 커야한다.(최소값보다 작은 값을 조회) = `and`
+
+          - ```sql
+            select ename,sal from emp 
+            where sal < all (950,1250,1600);
+            
+            select ename,sal from emp 
+            where sal > all (950,1250,1600);
+            ```
+
+  - 다중 컬럼 서브쿼리
+
+    - 두개 이상의 컬럼을 리턴하는 서브쿼리를 의미
+
+      - ```sq;
+        where (컬럼1,컬럼2...) in (비교할값1,비교할값2)
+        ```
+
+    - [실습] 각 부서에서 최소 급여를 받는 사용자의 이름, 사원번호, 부서번호, 급여를 출력
+
+      -  ```sql
+         select ename 이름, empno 사원번호, deptno 부서번호, sal 급여
+         from emp where(deptno, sal) 
+         in(select deptno, min(sal) from emp group by deptno);
+         ```
+
+  - 상호연관 서브쿼리
+
+    - 서브쿼리를 실행할때 메인쿼리 테이블의 컬럼을 참조해서 작업해야 하는 서브쿼리
+
+    - 서브쿼리의 비교 값이 계속 바뀌는 경우 메인의 값을 참조해서 사용
+
+      - 각각의 행에 입력된 값에 따라 결과가 달라지는 경우
+
+    - 메인쿼리의 테이블에 `alias`를 추가하고 참조해서 사용한다.
+
+    - 메인쿼리의 한`row` 에 대해서 서브쿼리가 한번씩 실행된다.
+
+    - 서브쿼리에서는 메인쿼리의 컬럼을 사용할수 있으나 메인쿼리에서는 서브쿼리의 컬럼을 사용할 수 없다.
+
+    - [실행흐름]
+
+      - 메인쿼리에서 참조할 값을 가져온다
+      - 메인쿼리에서 참조할 값을 이용해서 서브쿼리 실행한다.
+      - 서브쿼리의 결과를 이용해서 메인쿼리를 실행
+      - 1번부터 3번까지를 전체 레코드에 반복해서 실행한다.
+
+    - [실습] sal가 본인 부서의 평균 급여보다 많은 사원의 사원번호, 사원명, 부서번호, sal
+
+      - ```sql
+        select empno, ename,deptno, sal
+        from emp outer
+        where sal > (select avg(sal) from emp where deptno = outer.deptno);
+        ```
+
+
+
+## 2.5 DDL
+
+- 객체의 종류
+
+  - DBMS에서 관리되는 값들을 객체
+  - DBMS에서 쓸수있는 기능을 표현
+
+- 종류
+  - 테이블 : 데이터를 저장하기 위한 객체
+
+    ​              기본저장구조 
+
+    - 오라클의 모든 객체를 사용하기 위해서 정의해야한다
+
+  - 시퀀스 : 연속된 일련번호를 관리하는 객체
+
+  - 뷰 : `selcet`문을 저장하기 위한 객체
+
+  - 인덱스 : 빠르게 검색되기 위해 사용되는 객체
+
+- DDL명령어
+
+  - `create` : 객체를 생성
+
+  - `alter` : 객체의 구조를 변경
+
+  - `drop ` : 객체를 삭제
+
+  - `rename ` : 객체의 이름을 변경
+
+  - ```sql
+    create table member( id varchar2(20) primary key,
+    pass vacrhar2(20),
+    addr vacrhar2(20),
+    state varchar2(20));
+    ;
+    ```
+
+    
+
+
+
+
+
+## 2.6 DML
+
+- 명령문을 실행한후 저장하기 위해서 `commit`을 해야 한다
+
+- 모든컬럼에 정의해야 하고 값이 없는 경우는`null`이라고 명시
+
+- `insert` : 테이블에 레코드를 삽입
+
+  - `insert into 테이블명  values (컬럼값1,컬럼값2)`
+  - `insert into 테이블명 (컬럼명1,컬럼명2) values(값1,값2)
+
+- `update` :  레코드의 데이터를 변경
+
+  - `set`절은 수정하고 싶은 컬럼과 컬럼값을 입력한다
+
+  - 컬럼이 여러 개인 경우 콤마로 구분
+
+  - where절은 수정하고 싶은 레코드를 필터링할 조건을 정의
+
+  - where절을 추가하지 않으면 모든 컬럼이 변경된다
+
+  - where절은 select문의 where절과 동일하게 작업
+
+  - ``` 
+    [구문]
+    update 테이블명
+    set컬럼명1 = 컬럼값1,  컬럼명2= 컬럼값2
+    where 조건
+    ```
+
+- `delete` :  레코드 삭제
+
+  - 조건을 주지 않으면 모든 레코드가 삭제
+
+  - ```
+    [구문]
+    delete 테이블명
+    where 조건;
+    ```
+
+    
