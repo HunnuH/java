@@ -62,7 +62,19 @@
   - 문장의 종류
 
     - 순차형
+
     - 조건형
+
+      - `if` 
+
+        - ```java
+          [구문]
+          if(조건){ 조건이 만족하는 경우 실행할 문장}
+          else {조건이 만족하지 않는 경우 실행할 문장}
+          ```
+
+        - 
+
     - 순환형
 
   - 변수
@@ -112,4 +124,69 @@
 - 자에서 제공되는 기능(API)
 
 ---
+
+```java
+/* 점수를 저장할 수 있는 변수를 선언하고 다음과 같은 추력형태로 출력되도록 작성
+ 90이상 pass
+ 90미만 fail
+*/
+
+public class IfElseTest {
+	public static void main(String[] args) {
+		int num = 98;
+		if (num>=90) {
+          System.out.println(num+"점수는 pass");
+		}
+         else{
+			System.out.println(num+"점수는 fail");
+        }
+	}
+}
+```
+
+```java
+/*  아래의 변수를 선헌하고 다음과 같은 조건을 만족하도록 작성
+   int time = 8000; 초 데이터
+   [출력결과]
+   시간 분 초
+   로 변경하여 출력
+ */
+
+public class TimeTest{
+    public static void main(String[] args) {
+		int time = 8000;
+		int h = time/3600;
+	    int m = time%3600/60;
+		int s = time%3600%60;
+	
+		System.out.println(h+"시간"+m+"분"+s+"초");
+	}
+}
+
+```
+
+```java
+/* 
+1.변수를 3개 선언
+2.국어,영어,수학점수를 임의로 저장
+3.출력결과를 다음과 같이 작성
+[출력결과]
+총점:
+평균:
+*/
+
+public class ScoreExam
+{     public static void main(String [] args) {
+	    int K = 80;
+		int E = 90;
+		int M = 70;
+        int tot = K + E + M;
+		int avg = tot / 3;
+         System.out.println("[출력결과]");
+		 System.out.println("총점:"+tot);
+		 System.out.print("평균:"+avg);
+		       
+   }
+}
+```
 
