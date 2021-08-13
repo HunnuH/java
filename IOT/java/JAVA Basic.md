@@ -282,17 +282,57 @@
 
     - 조건제어문 : 선택형을 구현
       - if~else
-      
+
         ```java
         [구문]
         if(조건){ 조건이 만족하는 경우 실행할 문장}
         else {조건이 만족하지 않는 경우 실행할 문장}
         ```
-      
-      - switch
+
+      - if ~else if ~else : 동일한 변수에 판단해야하는 조건이 여러 개 있는 경우 사용하는 if문
+
+        ​                              수치데이터를 비교연산자를 써서 조건으로 판단하는 경우 큰 값을 맨위에 명시
+
+        ​                              다른 if문과 마찬가지로 { } 안에 if문을 중첩해서 사용할 수 있다.
+
+      - switch : 다중조건에 대한 제어를 위한 구문 
+
+        - if~else if ~else if 를 대신하여 사용
+
+        - 정확하게 일치하는 값을 비교하는 경우 사용(부등호 사용불가)
+
+        - case문에는 break문을 모두 추가해야 한다.
+
+        - ```java
+          [구문]
+          switch(평가하기위한 값){
+                  연산식(산술연산), 변수에 저장된 값, 메소드 호출결과
+                      case 평가할 값의 유형1 : 값1인경우 실행할 문장
+                          break;
+                      case 평가할 값의 유형2 : 값2인경우 실행할 문장
+                          break;
+                      default : case유형에 해당하지 않는 값인 경우 실행할 묹아    
+          }
+          ```
     - 반복제어문
-      - for
-      - while
+      - for : 정해진 횟수만큼 명령문을 반복해서 실행해야 하는 경우
+
+        ​        실행횟구가 정해져 있는 경우 사용
+
+        ​        실행횟수를 체크할 수 있는 int변수가 필요
+
+        ```java
+        [구문]
+        for(초기값; 조건; 증감값){    
+        /*초기값 : int변수명 = 초기값, 최초변수에 값을 초기화 시키며 start값을 지정
+          증감값 : 변수++ 변수-- 변수=변수+2, 초기화 시킨 변수의 값을 변경하기 위해 필요
+          조건 : 초기값이 증감식에 의해 변화되며 횟수를 체크하기위한 조건          */  
+           반복해서 실행할 명령문
+         } 
+        ```
+
+      - while : 조건을 판단해서 결과가 true이면 반복 실행
+
       - do~while
   - 배열
     - 일차원배열
@@ -304,96 +344,5 @@
 
 ---
 
-```java
-/* 점수를 저장할 수 있는 변수를 선언하고 다음과 같은 추력형태로 출력되도록 작성
- 90이상 pass
- 90미만 fail
-*/
 
-public class IfElseTest {
-	public static void main(String[] args) {
-		int num = 98;
-		if (num>=90) {
-          System.out.println(num+"점수는 pass");
-		}
-         else{
-			System.out.println(num+"점수는 fail");
-        }
-	}
-}
-```
-
-```java
-/*  아래의 변수를 선헌하고 다음과 같은 조건을 만족하도록 작성
-   int time = 8000; 초 데이터
-   [출력결과]
-   시간 분 초
-   로 변경하여 출력
- */
-
-public class TimeTest{
-    public static void main(String[] args) {
-		int time = 8000;
-		int h = time/3600;
-	    int m = time%3600/60;
-		int s = time%3600%60;
-	
-		System.out.println(h+"시간"+m+"분"+s+"초");
-	}
-}
-
-```
-
-```java
-/* 
-1.변수를 3개 선언
-2.국어,영어,수학점수를 임의로 저장
-3.출력결과를 다음과 같이 작성
-[출력결과]
-총점:
-평균:
-*/
-
-public class ScoreExam
-{     public static void main(String [] args) {
-	    int K = 80;
-		int E = 90;
-		int M = 70;
-        int tot = K + E + M;
-		int avg = tot / 3;
-         System.out.println("[출력결과]");
-		 System.out.println("총점:"+tot);
-		 System.out.print("평균:"+avg);
-		       
-   }
-}
-```
-
----
-
-```java
-package basic;
-
-public class APITest {
-	public static void main(String[] args) {
-       System.out.println("문자열");
-       int i =10;
-//문자열을 처리하기 위한 기능을 사용하기 위해 string 클래스를 jvm이 인식하는  작업공간에 할당
-       
-/*     [형식]
- *     할당되는 클래스타입 변수명= new heap에 할당해서 사용하고 싶은 클래스명()
- *                         or new heap에 할당해서 사용하고 싶은 클래스명()
- *     java문자열을 처리하기 위해서 string클래스를 heap에 할당
- *     heap할당된 string객체를 APITest.javad의 main블럭에서 사용하기 위해 str변수를 통해 접근할수 있도록 heap의 주소를 설정  */
-       String str = new String("java");
-       Thread t = new Thread();
-       Object o = new Object();
-       
-       
-/*     str이 참조하는 주소를 가지고 heap에 있는 객체를 참조
- *     heap에 할당된 string객체의 length메소드를 참조       */
-       str.length();//메소드호출
- 	}
-}
-```
 
